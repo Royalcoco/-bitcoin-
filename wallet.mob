@@ -1,0 +1,29 @@
+import os
+import hashlib
+import random
+
+# Simuler une librairie de smileys installée localement (ici dans un dossier fictif)
+simulated_library = [
+    "smile.png",
+    "wink.png",
+    "angry.png",
+    "laugh.png",
+    "cry.png",
+    "grin.png",
+    "suspicious.png"
+]
+
+# Générer un indice unique basé sur le hash des noms de fichiers de smileys
+def generate_symmetric_index_from_library(library):
+    index_score = 0
+    for file in library:
+        # Hash du nom du smiley
+        smiley_hash = hashlib.sha256(file.encode()).hexdigest()
+        # Convertir une portion du hash en int et le normaliser
+        smiley_value = int(smiley_hash[:4], 16) % 100
+        index_score += smiley_value
+    return index_score
+
+# Calcul de l'indice de valeur de minage des smileys
+decentralized_smiley_mining_index = generate_symmetric_index_from_library(simulated_library)
+decentralized_smiley_mining_index
