@@ -1,0 +1,91 @@
+from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import Dict
+
+app = FastAPI()
+
+# Base de données simulée des wallets
+smiley_wallet: Dict[str, float] = {}
+
+# Modèle de données pour commentaire + smiley
+class CommentSmiley(BaseModel):
+    user_id: str
+    comment: str
+    smiley: str  # 😊, 😐, 😠
+
+# Endpoint principal pour évaluer et calculer
+@app.post("/eval-smiley")
+def evaluate_smiley(data: CommentSmiley):
+    # Simule une évaluation d'IA du commentaire
+    ia_appreciation = ai_sentiment_analysis(data.comment)  # retourne 1.2, 1.0, ou 0.8
+
+    # Poids de chaque smiley
+    smiley_weight = {'😊': 3, '😐': 1, '😠': -1}
+    processing_cost = 0.001  # coût du calcul IA en crypto
+
+    # Calcul de valeur
+    smiley_score = smiley_weight.get(data.smiley, 0)
+    value = smiley_score * ia_appreciation - processing_cost
+    value = round(value, 4)
+
+    # Mise à jour du wallet
+    if data.user_id in smiley_wallet:
+        smiley_wallet[data.user_id] += value
+    else:
+        smiley_wallet[data.user_id] = value
+
+    return {
+        "user": data.user_id,
+        "comment": data.comment,
+        "smiley": data.smiley,
+        "ia_score": ia_appreciation,
+        "value_earned": value,
+        "wallet_balance": round(smiley_wallet[data.user_id], 4)
+    }
+
+# Simulateur IA (remplacer par modèle NLP réel)
+def ai_sentiment_analysis(comment: str) -> float:
+    comment_lower = comment.lower()
+    if "love" in comment_lower or "great" in comment_lower or "amazing" in comment_lower:
+        return 1.2
+    elif "ok" in comment_lower or "fine" in comment_lower or "neutral" in comment_lower:
+        return 1.0
+    else:
+        return 0.8
+
+class CommentSmiley(BaseModel):
+    user_id: str
+    comment: str
+    smiley: str  # 😊, 😐, 😠
+
+@app.post("/eval-smiley")
+def evaluate_smiley(data: CommentSmiley):
+    # Simulons une évaluation IA
+    ia_appreciation = ai_sentiment_analysis(data.comment)  # retourne 1.2, 1.0 ou 0.8
+
+    smiley_weight = {'😊': 3, '😐': 1, '😠': -1}
+    processing_cost = 0.001  # coût IA en crypto unité
+
+    value = smiley_weight.get(data.smiley, 0) * ia_appreciation - processing_cost
+    value = round(value, 4)
+
+    # Mise à jour du wallet
+    smiley_wallet[data.user_id] = smiley_wallet.get(data.user_id, 0) + value
+
+    return {
+        "user": data.user_id,
+        "smiley": data.smiley,
+        "comment": data.comment,
+        "ia_score": ia_appreciation,
+        "value": value,
+        "wallet_balance": round(smiley_wallet[data.user_id], 4)
+    }
+
+def ai_sentiment_analysis(comment: str) -> float:
+    # Simulation : vrai modèle IA à brancher ici (e.g., Hugging Face)
+    if "love" in comment or "great" in comment:
+        return 1.2
+    elif "ok" in comment or "fine" in comment:
+        return 1.0
+    else:
+        return 0.8
