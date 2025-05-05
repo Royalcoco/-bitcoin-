@@ -105,3 +105,27 @@ def calcul_valeur_marchande(smiley: str, commentaire: str) -> dict:
         "valeur point": valeur_totale,
         "montant_crypto": montant_crypto
     }
+# Simulation IA d'appréciation et transaction en crypto
+smiley_values = {
+    "😊": 0.002,
+    "😐": 0.001,
+    "😢": 0.0005,
+    "😂": 0.003,
+    "❤️": 0.004,
+}
+
+def evaluate_comment(comment, appreciation_rate=1.0):
+    total_value = 0
+    for char in comment:
+        if char in smiley_values:
+            total_value += smiley_values[char] * appreciation_rate
+    return round(total_value, 6)
+
+def redistribute_to_wallet(user_id, comment):
+    amount = evaluate_comment(comment)
+    # Ici, simule un appel au wallet
+    print(f"[TX] User: {user_id} earns {amount} crypto for: {comment}")
+    return amount
+
+# Exemple
+redistribute_to_wallet("user987", "Super article ! 😊❤️😂")
