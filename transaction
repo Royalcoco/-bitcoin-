@@ -89,3 +89,19 @@ def ai_sentiment_analysis(comment: str) -> float:
         return 1.0
     else:
         return 0.8
+def calcul_valeur_marchande(smiley: str, commentaire: str) -> dict:
+    base_valeurs = {'😊': 3.0, '😐': 1.0, '😠': -1.0}
+    appreciation = ai_sentiment_analysis(commentaire)  # 0.8 à 1.2
+    conversion = 0.01  # 1 point = 0.01 unité crypto
+
+    base = base_valeurs.get(smiley, 0)
+    valeur_totale = round(base * appreciation, 3)
+    montant_crypto = round(valeur_totale * conversion, 5)
+
+    return {
+        "smiley": smiley,
+        "commentaire": commentaire,
+        "appréciation IA": appreciation,
+        "valeur point": valeur_totale,
+        "montant_crypto": montant_crypto
+    }
