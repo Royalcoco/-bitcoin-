@@ -3,3 +3,6 @@ uvicorn app:app --reload
 curl -X POST http://127.0.0.1:8000/eval-smiley \
 -H "Content-Type: application/json" \
 -d '{"user_id": "alice", "comment": "I love this", "smiley": "😊"}'
+
+valeur_totale = base_smiley * appreciation_ia
+montant_en_crypto = valeur_totale * pourcentage_conversion
